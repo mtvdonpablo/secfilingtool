@@ -10,6 +10,7 @@ const STEPS = ['Search', 'Select Company', 'Select Filing', 'Analyze']
 
 export default function Home() {
   const [step, setStep] = useState(0)
+  const [privateCompany, setPrivateCompany] = useState('')
   const [results, setResults] = useState([])
   const [selectedCompany, setSelectedCompany] = useState(null)
   const [selectedFiling, setSelectedFiling] = useState(null)
@@ -120,9 +121,26 @@ export default function Home() {
           <div className="w-full flex-shrink-0 px-6 py-12">
             <h1 className="mb-2 text-3xl font-bold text-gray-900">Company Search</h1>
             <p className="mb-8 text-gray-500">
-              Search for a company to look up SEC filings.
+              Search for a publicly traded comparable company to analyze its SEC filings.
             </p>
             <SearchForm onResults={handleResults} />
+
+            <div className="mt-8 border-t border-gray-100 pt-8">
+              <label className="mb-1 block text-sm font-medium text-gray-700">
+                Private company you&apos;re evaluating{' '}
+                <span className="font-normal text-gray-400">(optional)</span>
+              </label>
+              <p className="mb-3 text-sm text-gray-400">
+                The AI will tailor its analysis to surface risks and insights relevant to this company.
+              </p>
+              <input
+                type="text"
+                value={privateCompany}
+                onChange={(e) => setPrivateCompany(e.target.value)}
+                placeholder="e.g. Wealthsimple"
+                className="w-full rounded-lg border border-gray-200 px-4 py-3 text-gray-900 placeholder-gray-400 outline-none focus:border-red-500 focus:ring-2 focus:ring-red-100"
+              />
+            </div>
           </div>
 
           {/* Slide 1: Company results */}
@@ -168,7 +186,11 @@ export default function Home() {
             )}
 
             {filingText && selectedFiling && (
-              <AnalysisResult filing={selectedFiling} filingText={filingText} />
+              <AnalysisResult
+                filing={selectedFiling}
+                filingText={filingText}
+                privateCompany={privateCompany}
+              />
             )}
           </div>
         </div>
